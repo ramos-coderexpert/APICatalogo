@@ -10,10 +10,12 @@ namespace APICatalogo.Controllers
     public class CategoriasController : ControllerBase
     {
         private readonly APICatalogoDbContext _context;
+        private readonly ILogger _logger;
 
-        public CategoriasController(APICatalogoDbContext context)
+        public CategoriasController(APICatalogoDbContext context, ILogger<CategoriasController> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         [HttpGet("categoriasProdutos")]
@@ -21,6 +23,8 @@ namespace APICatalogo.Controllers
         {
             try
             {
+                _logger.LogInformation("================== GET api/categorias/produtos ======================");
+
                 var categorias = _context.Categorias.AsNoTracking().Include(c => c.Produtos).ToList();
 
                 if (categorias is null)

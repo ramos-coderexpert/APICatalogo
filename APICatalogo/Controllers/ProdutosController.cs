@@ -1,4 +1,5 @@
 ﻿using APICatalogo.Context;
+using APICatalogo.Filters;
 using APICatalogo.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -16,12 +17,14 @@ namespace APICatalogo.Controllers
             _context = context;
         }
 
+
         [HttpGet]
-        public ActionResult<IEnumerable<Produto>> GetProdutos()
+        [ServiceFilter(typeof(ApiLoggingFilter))]
+        public async Task<ActionResult<IEnumerable<Produto>>> GetProdutos()
         {
             try
             {
-                var produtos = _context.Produtos.AsNoTracking().ToList();
+                var produtos = await _context.Produtos.AsNoTracking().ToListAsync();
 
                 if (produtos is null)
                     return NotFound("Produtos não encontrados!");
@@ -35,11 +38,11 @@ namespace APICatalogo.Controllers
         }
 
         [HttpGet("{id:int}", Name = "ObterProduto")]
-        public ActionResult<Produto> GetProduto(int id)
+        public async Task<ActionResult<Produto>> GetProduto(int id)
         {
             try
             {
-                var produto = _context.Produtos.AsNoTracking().FirstOrDefault(p => p.ProdutoId == id);
+                var produto = await _context.Produtos.AsNoTracking().FirstOrDefaultAsync(p => p.ProdutoId == id);
 
                 if (produto is null)
                     return NotFound("Produto não encontrado!");
