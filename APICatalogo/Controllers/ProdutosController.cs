@@ -1,6 +1,7 @@
 ﻿using APICatalogo.DTOs;
 using APICatalogo.Filters;
 using APICatalogo.Models;
+using APICatalogo.Pagination;
 using APICatalogo.Repository;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
@@ -39,11 +40,11 @@ namespace APICatalogo.Controllers
 
         [HttpGet]
         [ServiceFilter(typeof(ApiLoggingFilter))]
-        public ActionResult<IEnumerable<ProdutoDTO>> GetProdutos()
+        public ActionResult<IEnumerable<ProdutoDTO>> GetProdutos([FromQuery] ProdutosParameters produtosParameters)
         {
             try
             {
-                var produtos = _uow.ProdutoRepository.Get().ToList();
+                var produtos = _uow.ProdutoRepository.GetProdutos(produtosParameters);
 
                 if (produtos is null)
                     return NotFound("Produtos não encontrados!");
