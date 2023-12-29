@@ -8,13 +8,16 @@ namespace APICatalogo.Repository
     {
         public ProdutoRepository(APICatalogoDbContext context) : base(context) { }
 
-        public IEnumerable<Produto> GetProdutos(ProdutosParameters produtosParameters)
+        public PagedList<Produto> GetProdutos(ProdutosParameters produtosParameters)
         {
-            return Get()
-                 .OrderBy(p => p.Nome)
-                 .Skip((produtosParameters.PageNumber - 1) * produtosParameters.PageSize)
-                 .Take(produtosParameters.PageSize)
-                 .ToList();
+            //return Get()
+            //     .OrderBy(p => p.Nome)
+            //     .Skip((produtosParameters.PageNumber - 1) * produtosParameters.PageSize)
+            //     .Take(produtosParameters.PageSize)
+            //     .ToList();
+
+            return PagedList<Produto>.ToPagedList(Get().OrderBy(p => p.ProdutoId),
+                produtosParameters.PageNumber, produtosParameters.PageSize);
         }
 
         public IEnumerable<Produto> GetProdutosPorPreco()
