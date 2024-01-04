@@ -24,11 +24,11 @@ namespace APICatalogo.Controllers
 
 
         [HttpGet("menorPreco")]
-        public ActionResult<IEnumerable<ProdutoDTO>> GetProdutosPreco()
+        public async Task<ActionResult<IEnumerable<ProdutoDTO>>> GetProdutosPreco()
         {
             try
             {
-                var produtos = _uow.ProdutoRepository.GetProdutosPorPreco().ToList();
+                var produtos = await _uow.ProdutoRepository.GetProdutosPorPreco();
                 var produtosDTO = _mapper.Map<List<ProdutoDTO>>(produtos);
 
                 return produtosDTO;
@@ -41,11 +41,11 @@ namespace APICatalogo.Controllers
 
         [HttpGet]
         [ServiceFilter(typeof(ApiLoggingFilter))]
-        public ActionResult<IEnumerable<ProdutoDTO>> GetProdutos([FromQuery] ProdutosParameters produtosParameters)
+        public async Task<ActionResult<IEnumerable<ProdutoDTO>>> GetProdutos([FromQuery] ProdutosParameters produtosParameters)
         {
             try
             {
-                var produtos = _uow.ProdutoRepository.GetProdutos(produtosParameters);
+                var produtos = await _uow.ProdutoRepository.GetProdutos(produtosParameters);
 
                 if (produtos is null)
                     return NotFound("Produtos não encontrados!");
@@ -73,11 +73,11 @@ namespace APICatalogo.Controllers
         }
 
         [HttpGet("{id:int}", Name = "ObterProduto")]
-        public ActionResult<ProdutoDTO> GetProduto(int id)
+        public async Task<ActionResult<ProdutoDTO>> GetProduto(int id)
         {
             try
             {
-                var produto = _uow.ProdutoRepository.GetById(p => p.ProdutoId == id);
+                var produto = await _uow.ProdutoRepository.GetById(p => p.ProdutoId == id);
 
                 if (produto is null)
                     return NotFound("Produto não encontrado!");
@@ -93,7 +93,7 @@ namespace APICatalogo.Controllers
         }
 
         [HttpPost]
-        public ActionResult Post(ProdutoDTO produtoDTO)
+        public async Task<ActionResult> Post(ProdutoDTO produtoDTO)
         {
             try
             {
@@ -103,7 +103,7 @@ namespace APICatalogo.Controllers
                     return BadRequest("Dados inválidos!");
 
                 _uow.ProdutoRepository.Add(produto);
-                _uow.Commit();
+                await _uow.Commit();
 
                 var produtoDTOReturn = _mapper.Map<ProdutoDTO>(produto);
 
@@ -116,7 +116,7 @@ namespace APICatalogo.Controllers
         }
 
         [HttpPut("{id:int}")]
-        public ActionResult Put(int id, ProdutoDTO produtoDTO)
+        public async Task<ActionResult> Put(int id, ProdutoDTO produtoDTO)
         {
             try
             {
@@ -126,7 +126,7 @@ namespace APICatalogo.Controllers
                 var produto = _mapper.Map<Produto>(produtoDTO);
 
                 _uow.ProdutoRepository.Update(produto);
-                _uow.Commit();
+                await _uow.Commit();
 
                 var produtoDTOReturn = _mapper.Map<ProdutoDTO>(produto);
 
@@ -139,17 +139,17 @@ namespace APICatalogo.Controllers
         }
 
         [HttpDelete("{id:int}")]
-        public ActionResult<ProdutoDTO> Delete(int id)
+        public async Task<ActionResult<ProdutoDTO>> Delete(int id)
         {
             try
             {
-                var produto = _uow.ProdutoRepository.GetById(p => p.ProdutoId == id);
+                var produto = await _uow.ProdutoRepository.GetById(p => p.ProdutoId == id);
 
                 if (produto is null)
                     return NotFound("Produto não encontrado!");
 
                 _uow.ProdutoRepository.Delete(produto);
-                _uow.Commit();
+                await _uow.Commit();
 
                 var produtoDTOReturn = _mapper.Map<ProdutoDTO>(produto);
 
