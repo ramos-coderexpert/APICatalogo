@@ -13,6 +13,7 @@ namespace APICatalogo.Controllers
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [Route("[controller]")]
     [ApiController]
+    //[EnableCors("PermitisApiRequest")]
     public class CategoriasController : ControllerBase
     {
         private readonly IUnitOfWork _uow;
@@ -82,6 +83,7 @@ namespace APICatalogo.Controllers
         }
 
         [HttpGet("{id:int}", Name = "ObterCategoria")]
+        //[EnableCors("PermitisApiRequest")]
         public async Task<ActionResult<CategoriaDTO>> GetCategoria(int id)
         {
             try

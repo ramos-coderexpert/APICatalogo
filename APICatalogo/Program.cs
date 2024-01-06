@@ -47,9 +47,6 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
-builder.Services.AddDbContext<APICatalogoDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-builder.Services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<APICatalogoDbContext>().AddDefaultTokenProviders();
-
 //JWT
 //Adiciona o manipulador de autenticação e define o esquema de autenticação usado: Bearer
 //Valida o emissor, a audiencia e a chave. Usando a chave secreta, valida a assinatura
@@ -65,6 +62,13 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
     });
 
+
+//Definir politica CORS via atributo
+//builder.Services.AddCors(opt => opt.AddPolicy("PermitirApiRequest", builder => builder.WithOrigins("https://apirequest.io/").WithMethods("GET")));
+builder.Services.AddCors();
+
+builder.Services.AddDbContext<APICatalogoDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<APICatalogoDbContext>().AddDefaultTokenProviders();
 builder.Services.AddScoped<ApiLoggingFilter>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
@@ -83,7 +87,13 @@ if (app.Environment.IsDevelopment())
 
 app.ConfigureExceptionHadler();
 app.UseHttpsRedirection();
+app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
+
+//Politica CORS restritiva
+//app.UseCors(opt => opt.WithOrigins("https://apirequest.io/").WithMethods("GET"));
+
+app.UseCors(opt => opt.AllowAnyOrigin());
 app.MapControllers();
 app.Run();
