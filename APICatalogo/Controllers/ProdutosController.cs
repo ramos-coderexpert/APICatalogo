@@ -11,6 +11,8 @@ using Newtonsoft.Json;
 
 namespace APICatalogo.Controllers
 {
+    [ApiConventionType(typeof(DefaultApiConventions))]
+    [Produces("application/json")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [Route("[controller]")]
     [ApiController]
@@ -42,6 +44,11 @@ namespace APICatalogo.Controllers
             }
         }
 
+        /// <summary>
+        /// Exibe uma relação dos produtos
+        /// </summary>
+        /// <param name="produtosParameters"></param>
+        /// <returns>Retorna uma lista de objetos Produto</returns>
         [HttpGet]
         [ServiceFilter(typeof(ApiLoggingFilter))]
         public async Task<ActionResult<IEnumerable<ProdutoDTO>>> GetProdutos([FromQuery] ProdutosParameters produtosParameters)
@@ -75,6 +82,11 @@ namespace APICatalogo.Controllers
             }
         }
 
+        /// <summary>
+        /// Obtem um Produto pelo seu Id
+        /// </summary>
+        /// <param name="id">Id do Produto</param>
+        /// <returns>Um Objeto Produto</returns>
         [HttpGet("{id:int}", Name = "ObterProduto")]
         public async Task<ActionResult<ProdutoDTO>> GetProduto(int id)
         {

@@ -1,0 +1,122 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>APICatalogo</name>
+    </assembly>
+    <members>
+        <member name="M:APICatalogo.Controllers.AutorizaController.RegisterUser(APICatalogo.DTOs.UsuarioDTO)">
+            <summary>
+            Registra um novo Usuário
+            </summary>
+            <param name="userInfo">Um Objeto UsuarioDTO</param>
+            <returns>Status 200 e o token para o cliente</returns>
+        </member>
+        <member name="M:APICatalogo.Controllers.AutorizaController.Login(APICatalogo.DTOs.UsuarioDTO)">
+            <summary>
+            Verifica as credenciais de um Usuário
+            </summary>
+            <param name="userInfo">Um objeto do tipo UsuarioDTO</param>
+            <returns>Status 200 e o token para o cliente</returns>
+            <remarks>Retorna o Status 200 e o token novo</remarks>
+        </member>
+        <member name="M:APICatalogo.Controllers.CategoriasController.GetCategoria(System.Int32)">
+            <summary>
+            Obtem uma Categoria pelo seu Id
+            </summary>
+            <param name="id">Código da Categoria</param>
+            <returns>Objetos Categoria</returns>
+        </member>
+        <member name="M:APICatalogo.Controllers.CategoriasController.Post(APICatalogo.DTOs.CategoriaDTO)">
+            <summary>
+            Inclui uma nova Categoria
+            </summary>
+            <remarks>
+            Exemplo de request:
+            
+                POST api/categorias
+                {
+                    "categoriaId": 1,
+                    "nome": "categoria1",
+                    "imagemUrl": "http://teste.net/1.jpg"
+                }
+            </remarks>
+            <param name="categoriaDTO">Objeto Categoria</param>
+            <returns>O objeto Categoria incluido</returns>
+            <remarks>Retorna um objeto Categoria incluído</remarks>
+        </member>
+        <member name="M:APICatalogo.Controllers.ProdutosController.GetProdutos(APICatalogo.Pagination.ProdutosParameters)">
+            <summary>
+            Exibe uma relação dos produtos
+            </summary>
+            <param name="produtosParameters"></param>
+            <returns>Retorna uma lista de objetos Produto</returns>
+        </member>
+        <member name="M:APICatalogo.Controllers.ProdutosController.GetProduto(System.Int32)">
+            <summary>
+            Obtem um Produto pelo seu Id
+            </summary>
+            <param name="id">Id do Produto</param>
+            <returns>Um Objeto Produto</returns>
+        </member>
+        <member name="T:APICatalogo.Migrations.CreatingDataBase">
+            <inheritdoc />
+        </member>
+        <member name="M:APICatalogo.Migrations.CreatingDataBase.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:APICatalogo.Migrations.CreatingDataBase.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:APICatalogo.Migrations.CreatingDataBase.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:APICatalogo.Migrations.AddingDataAnnotations">
+            <inheritdoc />
+        </member>
+        <member name="M:APICatalogo.Migrations.AddingDataAnnotations.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:APICatalogo.Migrations.AddingDataAnnotations.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:APICatalogo.Migrations.AddingDataAnnotations.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:APICatalogo.Migrations.PopulatingTableCategorias">
+            <inheritdoc />
+        </member>
+        <member name="M:APICatalogo.Migrations.PopulatingTableCategorias.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:APICatalogo.Migrations.PopulatingTableCategorias.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:APICatalogo.Migrations.PopulatingTableCategorias.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:APICatalogo.Migrations.PopulatingTableProdutos">
+            <inheritdoc />
+        </member>
+        <member name="M:APICatalogo.Migrations.PopulatingTableProdutos.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:APICatalogo.Migrations.PopulatingTableProdutos.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:APICatalogo.Migrations.PopulatingTableProdutos.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:APICatalogo.Migrations.AddIdentity">
+            <inheritdoc />
+        </member>
+        <member name="M:APICatalogo.Migrations.AddIdentity.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:APICatalogo.Migrations.AddIdentity.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:APICatalogo.Migrations.AddIdentity.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+    </members>
+</doc>

@@ -10,6 +10,7 @@ using Newtonsoft.Json;
 
 namespace APICatalogo.Controllers
 {
+    [Produces("application/json")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [Route("[controller]")]
     [ApiController]
@@ -82,7 +83,14 @@ namespace APICatalogo.Controllers
             }
         }
 
+        /// <summary>
+        /// Obtem uma Categoria pelo seu Id
+        /// </summary>
+        /// <param name="id">Código da Categoria</param>
+        /// <returns>Objetos Categoria</returns>
         [HttpGet("{id:int}", Name = "ObterCategoria")]
+        [ProducesResponseType(typeof(ProdutoDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         //[EnableCors("PermitisApiRequest")]
         public async Task<ActionResult<CategoriaDTO>> GetCategoria(int id)
         {
@@ -103,8 +111,26 @@ namespace APICatalogo.Controllers
             }
         }
 
+        /// <summary>
+        /// Inclui uma nova Categoria
+        /// </summary>
+        /// <remarks>
+        /// Exemplo de request:
+        /// 
+        ///     POST api/categorias
+        ///     {
+        ///         "categoriaId": 1,
+        ///         "nome": "categoria1",
+        ///         "imagemUrl": "http://teste.net/1.jpg"
+        ///     }
+        /// </remarks>
+        /// <param name="categoriaDTO">Objeto Categoria</param>
+        /// <returns>O objeto Categoria incluido</returns>
+        /// <remarks>Retorna um objeto Categoria incluído</remarks>
         [HttpPost]
-        public async Task<ActionResult> Post(CategoriaDTO categoriaDTO)
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult> Post([FromBody] CategoriaDTO categoriaDTO)
         {
             try
             {
@@ -127,6 +153,7 @@ namespace APICatalogo.Controllers
         }
 
         [HttpPut("{id:int}")]
+        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Put))]
         public async Task<ActionResult> Put(int id, CategoriaDTO categoriaDTO)
         {
             try

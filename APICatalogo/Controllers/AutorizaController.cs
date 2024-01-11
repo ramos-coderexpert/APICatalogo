@@ -8,6 +8,7 @@ using System.Text;
 
 namespace APICatalogo.Controllers
 {
+    [Produces("application/json")]
     [Route("api/[controller]")]
     [ApiController]
     public class AutorizaController : ControllerBase
@@ -16,10 +17,11 @@ namespace APICatalogo.Controllers
         private readonly SignInManager<IdentityUser> _signManager;
         private readonly IConfiguration _configuration;
 
-        public AutorizaController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signManager)
+        public AutorizaController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signManager, IConfiguration configuration)
         {
             _userManager = userManager;
             _signManager = signManager;
+            _configuration = configuration;
         }
 
         [HttpGet]
@@ -28,7 +30,11 @@ namespace APICatalogo.Controllers
             return "AutorizaController  ::  Acessado em :   " + DateTime.Now.ToLongTimeString();
         }
 
-
+        /// <summary>
+        /// Registra um novo Usuário
+        /// </summary>
+        /// <param name="userInfo">Um Objeto UsuarioDTO</param>
+        /// <returns>Status 200 e o token para o cliente</returns>
         [HttpPost]
         public async Task<ActionResult> RegisterUser([FromBody] UsuarioDTO userInfo)
         {
@@ -51,6 +57,12 @@ namespace APICatalogo.Controllers
             return Ok(GeraToken(userInfo));
         }
 
+        /// <summary>
+        /// Verifica as credenciais de um Usuário
+        /// </summary>
+        /// <param name="userInfo">Um objeto do tipo UsuarioDTO</param>
+        /// <returns>Status 200 e o token para o cliente</returns>
+        /// <remarks>Retorna o Status 200 e o token novo</remarks>
         [HttpPost("login")]
         public async Task<ActionResult> Login([FromBody] UsuarioDTO userInfo)
         {
