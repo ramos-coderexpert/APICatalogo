@@ -18,14 +18,14 @@ namespace APICatalogo.Controllers
     public class CategoriasController : ControllerBase
     {
         private readonly IUnitOfWork _uow;
-        private readonly ILogger _logger;
         private readonly IMapper _mapper;
+        //private readonly ILogger _logger;
 
-        public CategoriasController(IUnitOfWork uow, ILogger<CategoriasController> logger, IMapper mapper)
+        public CategoriasController(IUnitOfWork uow, IMapper mapper /*ILogger<CategoriasController> logger*/)
         {
             _uow = uow;
-            _logger = logger;
             _mapper = mapper;
+            //_logger = logger;
         }
 
 
@@ -34,7 +34,7 @@ namespace APICatalogo.Controllers
         {
             try
             {
-                _logger.LogInformation("================== GET api/categorias/produtos ======================");
+                //_logger.LogInformation("================== GET api/categorias/produtos ======================");
 
                 var categorias = await _uow.CategoriaRepository.GetCategoriasProdutos();
 
@@ -43,7 +43,7 @@ namespace APICatalogo.Controllers
 
                 var categoriasDTO = _mapper.Map<List<CategoriaDTO>>(categorias);
 
-                return categoriasDTO;
+                return Ok(categoriasDTO);
             }
             catch (Exception)
             {
