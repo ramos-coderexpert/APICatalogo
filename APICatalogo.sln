@@ -5,7 +5,7 @@ VisualStudioVersion = 17.8.34309.116
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "APICatalogo", "APICatalogo\APICatalogo.csproj", "{62FF3DC2-D516-4683-A29B-BECF344039C7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApiCatalogoxUnitTests", "ApiCatalogoxUnitTests\ApiCatalogoxUnitTests.csproj", "{52D211BD-1704-42A2-96A5-9F9745561375}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApiCatalogoxUnitTests", "ApiCatalogoxUnitTests\ApiCatalogoxUnitTests.csproj", "{52D211BD-1704-42A2-96A5-9F9745561375}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -6,6 +6,7 @@ using APICatalogo.Repository;
 using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -128,6 +129,32 @@ namespace APICatalogo.Controllers
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, "Ocorreu um problema com a sua solicitação!");
             }
+        }
+
+        [HttpPatch("{id:int}/UpdatePartial")]
+        public async Task<ActionResult<ProdutoDTOUpdateResponse>> Patch(int id, JsonPatchDocument patchProdutoDTO)
+        {
+            if (patchProdutoDTO is null || id <= 0)
+                return BadRequest();
+
+            var produto = await _uow.ProdutoRepository.GetById(c => c.ProdutoId == id);
+
+            if (produto is null)
+                return NotFound();
+
+            var produtoUpdateRequest = _mapper.Map<ProdutoDTOUpdateRequest>(produto);
+
+            patchProdutoDTO.ApplyTo(produtoUpdateRequest);
+
+            if (!ModelState.IsValid || TryValidateModel(produtoUpdateRequest))
+                return BadRequest(ModelState);
+
+            _mapper.Map(produtoUpdateRequest, produto);
+
+            _uow.ProdutoRepository.Update(produto);
+            await _uow.Commit();
+
+            return Ok(_mapper.Map<ProdutoDTOUpdateResponse>(produto));
         }
 
         [HttpPut("{id:int}")]
