@@ -71,11 +71,11 @@ namespace APICatalogo.Controllers
                     produtos.HasPrevious
                 };
 
-                Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
+                Response.Headers.Append("X-Pagination", JsonConvert.SerializeObject(metadata));
 
-                var produtosDTO = _mapper.Map<List<ProdutoDTO>>(produtos);
+                var produtosDTO = _mapper.Map<IEnumerable<ProdutoDTO>>(produtos);
 
-                return produtosDTO;
+                return Ok(produtosDTO);
             }
             catch (Exception)
             {

@@ -2,7 +2,7 @@
 
 namespace APICatalogo.Pagination
 {
-    public class PagedList<T> : List<T>
+    public class PagedList<T> : List<T> where T : class
     {
         public int CurrentPage { get; private set; }
         public int TotalPages { get; private set; }

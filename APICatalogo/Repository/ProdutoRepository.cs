@@ -17,8 +17,9 @@ namespace APICatalogo.Repository
             //     .Take(produtosParameters.PageSize)
             //     .ToList();
 
-            return await PagedList<Produto>.ToPagedList(Get().OrderBy(p => p.ProdutoId),
-                produtosParameters.PageNumber, produtosParameters.PageSize);
+            var produtosOrdenados = Get().OrderBy(p => p.ProdutoId).AsQueryable();
+            var produtosPaginados = await PagedList<Produto>.ToPagedList(produtosOrdenados, produtosParameters.PageNumber, produtosParameters.PageSize);
+            return produtosPaginados;
         }
 
         public async Task<IEnumerable<Produto>> GetProdutosPorPreco()
