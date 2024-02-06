@@ -58,29 +58,20 @@ namespace APICatalogo.Controllers
             {
                 var produtos = await _uow.ProdutoRepository.GetProdutos(produtosParameters);
 
-                if (produtos is null)
-                    return NotFound("Produtos não encontrados!");
-
-                var metadata = new
-                {
-                    produtos.TotalCount,
-                    produtos.PageSize,
-                    produtos.CurrentPage,
-                    produtos.TotalPages,
-                    produtos.HasNext,
-                    produtos.HasPrevious
-                };
-
-                Response.Headers.Append("X-Pagination", JsonConvert.SerializeObject(metadata));
-
-                var produtosDTO = _mapper.Map<IEnumerable<ProdutoDTO>>(produtos);
-
-                return Ok(produtosDTO);
+                return ObterProdutos(produtos);
             }
             catch (Exception)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, "Ocorreu um problema com a sua solicitação!");
             }
+        }
+
+        [HttpGet("filter/preco/pagination")]
+        public async Task<ActionResult<IEnumerable<ProdutoDTO>>> GetProdutosFilterPreco([FromQuery] ProdutosFiltroPreco produtosFilterParams)
+        {
+            var produtos = await _uow.ProdutoRepository.GetProdutosFiltroPreco(produtosFilterParams);
+
+            return ObterProdutos(produtos);
         }
 
         /// <summary>
@@ -201,6 +192,28 @@ namespace APICatalogo.Controllers
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, "Ocorreu um problema com a sua solicitação!");
             }
+        }
+
+        private ActionResult<IEnumerable<ProdutoDTO>> ObterProdutos(PagedList<Produto> produtos)
+        {
+            if (produtos is null)
+                return NotFound("Produtos não encontrados!");
+
+            var metadata = new
+            {
+                produtos.TotalCount,
+                produtos.PageSize,
+                produtos.CurrentPage,
+                produtos.TotalPages,
+                produtos.HasNext,
+                produtos.HasPrevious
+            };
+
+            Response.Headers.Append("X-Pagination", JsonConvert.SerializeObject(metadata));
+
+            var produtosDTO = _mapper.Map<IEnumerable<ProdutoDTO>>(produtos);
+
+            return Ok(produtosDTO);
         }
     }
 }

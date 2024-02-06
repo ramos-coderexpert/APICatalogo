@@ -58,29 +58,20 @@ namespace APICatalogo.Controllers
             {
                 var categorias = await _uow.CategoriaRepository.GetCategorias(categoriasParameters);
 
-                if (categorias is null)
-                    return NotFound("Categorias não encontradas!");
-
-                var metadata = new
-                {
-                    categorias.TotalCount,
-                    categorias.PageSize,
-                    categorias.CurrentPage,
-                    categorias.TotalPages,
-                    categorias.HasNext,
-                    categorias.HasPrevious
-                };
-
-                Response.Headers.Append("X-Pagination", JsonConvert.SerializeObject(metadata));
-
-                var categoriasDTO = _mapper.Map<IEnumerable<CategoriaDTO>>(categorias);
-
-                return Ok(categoriasDTO);
+                return ObterCategorias(categorias);
             }
             catch (Exception)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, "Ocorreu um problema com a sua solicitação!");
             }
+        }
+
+        [HttpGet("filter/preco/pagination")]
+        public async Task<ActionResult<IEnumerable<CategoriaDTO>>> GetCategoriasFiltradasNome([FromQuery] CategoriasFiltroNome categoriasFilterParams)
+        {
+            var categorias = await _uow.CategoriaRepository.GetCategoriasFiltroNome(categoriasFilterParams);
+
+            return ObterCategorias(categorias);
         }
 
         /// <summary>
@@ -197,6 +188,28 @@ namespace APICatalogo.Controllers
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, "Ocorreu um problema com a sua solicitação!");
             }
+        }
+
+        private ActionResult<IEnumerable<CategoriaDTO>> ObterCategorias(PagedList<Categoria> categorias)
+        {
+            if (categorias is null)
+                return NotFound("Categorias não encontradas!");
+
+            var metadata = new
+            {
+                categorias.TotalCount,
+                categorias.PageSize,
+                categorias.CurrentPage,
+                categorias.TotalPages,
+                categorias.HasNext,
+                categorias.HasPrevious
+            };
+
+            Response.Headers.Append("X-Pagination", JsonConvert.SerializeObject(metadata));
+
+            var categoriasDTO = _mapper.Map<IEnumerable<CategoriaDTO>>(categorias);
+
+            return Ok(categoriasDTO);
         }
     }
 }
