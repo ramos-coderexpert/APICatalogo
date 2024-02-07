@@ -6,6 +6,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using Newtonsoft.Json;
 
 namespace APICatalogo.Controllers
@@ -15,6 +16,7 @@ namespace APICatalogo.Controllers
     [Route("[controller]")]
     [ApiController]
     //[EnableCors("PermitisApiRequest")]
+    [EnableRateLimiting("fixedWindow")]
     public class CategoriasController : ControllerBase
     {
         private readonly IUnitOfWork _uow;
@@ -30,6 +32,7 @@ namespace APICatalogo.Controllers
 
 
         [HttpGet("categoriasProdutos")]
+        [DisableRateLimiting]
         public async Task<ActionResult<IEnumerable<CategoriaDTO>>> GetCategoriasProdutos()
         {
             try

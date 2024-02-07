@@ -7,12 +7,14 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
 using System.Text;
 using System.Text.Json.Serialization;
+using System.Threading.RateLimiting;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -95,6 +97,35 @@ builder.Services.AddApiVersioning(options =>
     options.ReportApiVersions = true;
 });
 
+// Rate Limiting
+builder.Services.AddRateLimiter(rateLimiterOptions =>
+{
+    rateLimiterOptions.AddFixedWindowLimiter("fixedWindow", options =>
+    {
+        options.PermitLimit = 3;
+        options.Window = TimeSpan.FromSeconds(10);
+        options.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
+        options.QueueLimit = 2;
+    });
+    rateLimiterOptions.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+
+    rateLimiterOptions.AddTokenBucketLimiter("token", options =>
+    {
+        options.TokenLimit = 3;
+        options.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
+        options.QueueLimit = 2;
+        options.ReplenishmentPeriod = TimeSpan.FromSeconds(5);
+        options.TokensPerPeriod = 2;
+        options.AutoReplenishment = true;
+    });
+
+    rateLimiterOptions.AddConcurrencyLimiter("concurrency", options =>
+    {
+        options.PermitLimit = 5;
+        options.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
+        options.QueueLimit = 1;
+    });
+});
 
 //Definir politica CORS via atributo
 //builder.Services.AddCors(opt => opt.AddPolicy("PermitirApiRequest", builder => builder.WithOrigins("https://apirequest.io/").WithMethods("GET")));
@@ -121,6 +152,7 @@ if (app.Environment.IsDevelopment())
 app.ConfigureExceptionHadler();
 app.UseHttpsRedirection();
 app.UseRouting();
+app.UseRateLimiter();
 app.UseAuthentication();
 app.UseAuthorization();
 
